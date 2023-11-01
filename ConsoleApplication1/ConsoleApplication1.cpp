@@ -14,42 +14,46 @@
 } Point2D; 
 double Dist(Point2D p1, Point2D p2);*/
 
-class Point     
+class Point                                     //class 정의
 {
 public:
     int x;
     int y;
     //나 자신(x,y)
 
-    Point(int x1, int y1)          //생성자 이름 = 클래스 이름과 동일해야함
+    Point(int x1, int y1)                       //생성자 이름 = 클래스 이름과 동일해야함
+    //point(int x1 = 0, int y1 = 0)            //default 값 설정
     {
         x = x1;  y = y1;
-    }                           
-    double Dist(Point p);   //함수 원형 선언
+    }
+
+    double Dist(Point p);                      //Function Prototype
+    double Dist(int x1, int y1);              //오버로딩
     double Square(Point p1);
-  };
+};
 
+//double dist(Point p)                             //두 점 간의 거리,  class 이름 + 콜론콜론
 
-double Point::Dist(Point p)                   //두 점 간의 거리,  class 이름 + 콜론콜론
-{    
-    int w = (x - p.x);
-    int h = (y - p.y);
+//double Dist(int x1, int y1)                   //두 점 간의 거리,  class 이름 + 콜론콜론
+//{
+//    int w = (x - x1);
+//    int h = (y - y1);
+//
+//    double d = sqrt(w * w + h * h);           //스퀘어 루트
+//
+//
+//    return d;
+//}
 
-    double d = sqrt(w * w + h * h);           //스퀘어 루트
-
-
-    return d;
-}
-
-double Point::Square(Point q)
-{
-    int w1 = x - q.x;
-    int h1 = y - q.y;
-
-    double d2 = w1 * h1;
-
-    return d2;
-}
+//double Point::Square(Point q)
+//{
+//    int w1 = x - q.x;
+//    int h1 = y - q.y;
+//
+//    double d2 = w1 * h1;
+//
+//    return d2;
+//}
 int main()
 {
 /*    printf("안녕하세요. C++의 세계에 오신 걸 환영합니다.\n\n");
@@ -67,18 +71,58 @@ int main()
     printf("-2의 절댓값 = %d\n", ABS(-2));
     */
 
-    Point p1(10, 10), p2(20, 30);
+    Point p1(10, 10), p2(20, 30) ;
     //p1.x = 10, p1.y = 10;
     //p2.x = 20; p2.y = 30;
+       
 
     double d = p1.Dist(p2);     //p1은 객체, Dist함수가 원래 자기가 갖고있던 값(x,y)이랑 p2값으로 Dist 함수 돌려서 d로 출력..(?)
+    //= p2.Dist(p1);
+
+    double e = p1.Dist(20, 30);
 
     printf("두 점 p1(%d, %d), p2(%d, %d)의 거리는 %.2f입니다.\n", 
         p1.x, p1.y, p2.x, p2.y, d);
 
+    printf("두 점 사이의 거리는 %.2f입니다\n", e);
+
     double d2 = p1.Square(p2);
     printf("사각형의 넓이는 %.2f 입니다.\n", d2);
 
+    
  //std::cout << "안녕하세요. C++의 세계에 오신 걸 환영합니다.\n";
 }
+
+double Point::Dist(Point p)
+{
+    int w = (x - p.x);
+    int h = (y - p.y);
+
+    double d = sqrt(w * w + h * h);           //스퀘어 루트
+
+
+    return d;
+}//함수 원형 선언
+
+double Point::Dist(int x1, int y1)            //오버로딩
+{
+    int w = (x - x1);
+    int h = (y - y1);
+
+    double d = sqrt(w * w + h * h);         
+
+
+    return d;
+}
+
+double Point::Square(Point p1) 
+{
+    int w1 = x - p1.x;
+    int h1 = y - p1.y;
+
+    double d2 = w1 * h1;
+
+    return d2;
+}
+
 
