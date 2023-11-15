@@ -90,7 +90,7 @@ int main()
       //HAL_Delay(500);
       if(rxData == 'r') {i++;}	
 			if(rxData == 'l') {i--;}
-			if(rxData == 'l') {i = i;}
+			if(rxData == 'o') {i = i;}
 			
 			HAL_GPIO_WritePin(GPIOC, LED << i, 1);
 			HAL_Delay(500);			
