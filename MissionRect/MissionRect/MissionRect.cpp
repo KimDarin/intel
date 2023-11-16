@@ -3,7 +3,7 @@
 
 int main()
 {
-    Rect r1;
+    Rect r1; Rect r4;
     Rect r2(10, 10, 30, 30);
     Rect r3(Point(20, 20), Point(40, 40));
 
