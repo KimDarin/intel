@@ -15,7 +15,7 @@ void Point::Show(const char* s)
 
 void Point::ShowEx(const char* s)
 {
-	std::cout << s << "(" << x << "," << y << ")";
+	std::cout << s << "(" << x << "," << y << ")" << std::endl;
 	printf("%s(%d,%d)", s, x, y);							
 }
 
