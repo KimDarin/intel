@@ -36,7 +36,7 @@ Rect& Rect::Show(const char* s)	// Rect(P1(x1, y1)),  P2(x2, y2))
 	return *this;
 }
 
-double Rect::Area()	//
+double Rect::Area()	
 {
 	return (double)(ABS((p1.x - p2.x) * (p1.y - p2.y)));
 }
