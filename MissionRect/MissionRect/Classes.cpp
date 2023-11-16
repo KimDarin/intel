@@ -15,7 +15,8 @@ void Point::Show(const char* s)
 
 void Point::ShowEx(const char* s)
 {
-	printf("%s(%d,%d)", s, x, y);				//줄바꿈만 뺌
+	std::cout << s << "(" << x << "," << y << ")";
+	printf("%s(%d,%d)", s, x, y);							
 }
 
 Point& Point::operator+(Point p)  // 두점 CurP와 p의 + 연산결과를 (새로운 Point로) 반환
