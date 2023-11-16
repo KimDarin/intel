@@ -38,6 +38,7 @@
 /ConsoleApplication3/.vs/ConsoleApplication3
 /ConsoleApplication4/.vs/ConsoleApplication4/v17
 /ConsoleApplication4/x64/Debug
+<<<<<<< HEAD
 /classes/.vs/classes/v17
 /classes/ClassTest1/x64/Debug
 /classes/x64/Debug
@@ -46,3 +47,9 @@
 /MissionRect/Debug
 /MissionRect/MissionRect/x64/Debug
 /MissionRect/x64/Debug
+=======
+/Project2/.vs/Project2
+/Project2/Project2/x64/Debug
+/Project2/x64/Debug
+>>>>>>> 227737a2bf6a0d06d01d2df98c6f6ad2620f94b0
+/Project2
