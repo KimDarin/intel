@@ -41,6 +41,7 @@ double Rect::Area()
 	return (double)(ABS((p1.x - p2.x) * (p1.y - p2.y)));
 }
 
+
 Rect& Rect::operator +(Rect r)
 {
 	int x1 = MIN(MIN(  this-> x1, this-> x2), MIN (r.x1, r.x2));

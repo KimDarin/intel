@@ -12,8 +12,18 @@ class Point
 private:
 public:
 	int x;	int y;
+	Point* p1 = NULL;
 
-	Point(int x1 = 0, int y1 = 0) : x(x1), y(y1) {}
+	Point(int x1 = 0, int y1 = 0) : x(x1), y(y1) 
+	{
+		std::cout << "Point 생성(" << x << "," << y << ")\n";
+	}
+
+	~Point() 
+	{
+		std::cout << "Point 소멸(" << x << "," << y << ")\n";
+		if (p1 != NULL) delete p1;
+	}
 
 	double Dist(Point p);		// Distance
 	void Show(const char* s = NULL);  // View Current Point,  s = 포인트 이름
