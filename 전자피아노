@@ -107,8 +107,7 @@ int main(void)
 	HAL_UART_Receive_IT(&huart2, &rxData, sizeof(rxData)); 
   while (1)
   {
-		//TIM3->EGR = TIM3->EGR | 0x01;
-		//TIM3->EGR = TIM_EGR_UG; // Update generation
+		TIM3->EGR = TIM3->EGR | 0x01;
 
 		HAL_Delay(100);
 		printf("%c\n\r", rxData);
@@ -201,16 +200,8 @@ int main(void)
 			TIM3->CCR2 = 0;		
 			rxData = 0;	
 		}
-		
-		TIM3->EGR = TIM_EGR_UG;
-		
-		//rxData = 0;
-		
-		//pwmF = 10000000 / scale[piano++];
-		//TIM3->ARR = pwmF - 1;
-		//TIM3->CCR2 = pwmF / 2;	
-		//HAL_Delay(1000);
-		//if(piano > 8) piano = 0;
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
