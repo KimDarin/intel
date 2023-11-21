@@ -122,7 +122,7 @@ int main(void)
 			TIM3->ARR = 0;			//쓰레기값 들어있을 수도 있기 때문에 초기화 해줌
 			TIM3->CCR2 = 0;			//쓰레기값 들어있을 수도 있기 때문에 초기화 해줌
 			//pwmF = 0;
-			rxData = 0;			//반복하기 위해 rxData값 초기화
+			rxData = 0;			//도 한 번만 소리내기 위해 rxData값 초기화
 		}
 		
 		if(rxData == '2')
