@@ -116,13 +116,13 @@ int main(void)
 		if(rxData == '1')
 		{
 			pwmF = 10000000 / scale[0];
-			TIM3->ARR = pwmF - 1;
-			TIM3->CCR2 = pwmF / 2;
+			TIM3->ARR = pwmF - 1;		//음계주파수 입력
+			TIM3->CCR2 = pwmF / 2;		//소리내는 코드(듀티비를 50%로 만들어줌)	
 			HAL_Delay(300);
-			TIM3->ARR = 0;
-			TIM3->CCR2 = 0;	
+			TIM3->ARR = 0;			//쓰레기값 들어있을 수도 있기 때문에 초기화 해줌
+			TIM3->CCR2 = 0;			//쓰레기값 들어있을 수도 있기 때문에 초기화 해줌
 			//pwmF = 0;
-			rxData = 0;
+			rxData = 0;			//반복하기 위해 rxData값 초기화
 		}
 		
 		if(rxData == '2')
