@@ -1,0 +1,342 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+int key;                                                      //메뉴 중 원하는 번호 입력 받는 키(전역 변수)
+int i;                                                          //for문
+int found = 0;
+//검색 결과를 나타내는 변수(검색하는 책 찾았을 경우 1로 설정됨, 못 찾았을 경우 0으로 유지)
+int deletenum;
+
+struct book                                                // 도서 정보 (구조체 변수)
+{
+    int num, price;                                       //번호, 가격(정수)
+    char title[20], author[20], pub[20];        //제목, 저자, 출판사(문자열 배열)
+    int borrowed;                                        //대출 상태(0 or 1) <0 : 대출 가능 1 : 대출 불가>
+};
+
+struct book list[100];                                  // 도서 목록을 저장하는 배열
+int count = 0;                                             // 등록된 도서의 수(for문 제어, 입력된 도서 없을 때 목록 조회할 경우 등록된 도서 없다고 출력)                      
+
+// 함수 원형 선언
+void menu();                                               //메뉴 띄우는 함수
+void registerBook();                                     //도서 등록하는 함수
+void listBooks();                                         //도서 목록 조회하는 함수  
+void searchBook();                                     //도서 검색하는 함수
+void printBook();                                        //등록 목록, 검색 출력 함수  
+void borrowBook();                                     //도서 대출 함수 
+void returnBook();                                      //도서 반납 함수            
+int overlap_num(int _num);                          //도서 번호 중복 확인 함수
+void deleteBook();                                      //도서 삭제 함수        
+
+int main()
+{
+    menu();
+
+    while (1)
+    {
+        if (key == 0)   //종료
+        {
+            break;
+        }
+        else if (key == 1)      //등록
+        {
+            registerBook();
+            menu();
+        }
+        else if (key == 2)      //목록
+        {
+            listBooks();
+            menu();
+        }
+        else if (key == 3)      //검색
+        {
+            searchBook();
+            menu();
+        }
+        else if (key == 4)      //대출
+        {
+            borrowBook();
+            menu();
+        }
+        else if (key == 5)      //대출
+        {
+            returnBook();
+            menu();
+        }
+        else if (key == 6)      //삭제
+        {
+            if (count == 0) {
+                listBooks();
+                menu();
+            }
+            else {
+                listBooks();
+                deleteBook();
+                menu();
+            }
+        }
+        else                       //0~6 외의 숫자 입력 받았을 경우 오류 메세지 표시
+        {
+            printf("잘못된 입력입니다. 다시 시도하세요.\n");
+            menu();
+        }
+    }
+
+    return 0;
+}
+
+void menu()
+{
+    printf("*****메뉴*****\n");
+    printf(" 1. 등록\n 2. 목록\n 3. 검색\n 4. 대출\n 5. 반납\n 6. 삭제\n 0. 종료\n");
+    printf("**************\n");
+    scanf("%d", &key);
+}
+
+void registerBook()
+{
+    int key2;
+    while (1) {
+        if (count < 100)
+        {
+            printf("등록하려는 책의 번호를 입력하세요(숫자 입력): ");
+            scanf("%d", &list[count].num);
+             if (overlap_num(list[count].num)) {
+                printf("이미 등록된 번호입니다. 다른 번호를 입력하세요\n");
+                // 중복된 경우 다시 번호를 입력받기 위해 반복문 처음으로 이동
+                continue;
+             }
+
+            printf("책 제목을 입력하세요(20자내외): ");
+            scanf(" %20[^\n]s", list[count].title);
+            printf("등록하려는 책의 저자를 입력하세요(20자내외): ");
+            scanf(" %20[^\n]s", list[count].author);
+            printf("등록하려는 책의 출판사를 입력하세요(20자내외): ");
+            scanf(" %20[^\n]s", list[count].pub);
+            printf("등록하려는 책의 가격을 입력하세요(숫자 입력): ");
+            scanf("%d", &list[count].price);
+
+            list[count].borrowed = 0;
+            count++;                                                                   //책 등록할 때 마다 count변수 +1
+
+            while (1) {
+                printf("더 입력할 책이 있으면 '1', 없으면 '2'를 입력하세요.\n");
+                scanf("%d", &key2);
+
+                if (key2 == 1)
+                {
+                    break;
+                }
+                else if (key2 == 2)
+                {
+                    goto loop;                                                          //이중 while문 빠져나가기 위해
+                }
+                else
+                {
+                    printf("잘못 입력하셨습니다.\n");
+                }
+            }
+        }
+        else
+        {
+            printf("더 이상 책을 등록할 수 없습니다.\n");                //책이 100권 이상 입력되었을 경우 오류 메세지 표시
+        }
+
+    } loop: key2;
+}
+
+int overlap_num(int _Num) {    
+    for (int i = 0; i < count; i++) {
+        if (_Num == list[i].num) {
+            return 1;  // 중복되면 리턴 1
+        }
+    }
+    return 0;  // 중복되지 않으면 리턴 0
+}
+
+
+void listBooks()
+{
+    if (count == 0)
+    {
+        printf("등록된 책이 없습니다.\n");                                 //등록된 책이 없을 경우 오류 메세지 표시
+        return;
+    }
+    else                                                                               //등록된 책이 1권 이상인 경우
+    {
+        printf("등록된 책 목록: \n");
+        for (i = 0; i < count; i++) {
+            printBook();
+        }
+    }
+}
+
+void printBook()
+{ 
+    if (list[i].borrowed == 0) {
+        printf("대출 가능\n");
+    }
+    else {
+        printf("대출 중\n");
+    }
+    printf("%d. %s %s %s %d원, 대출 상태 : ",
+        list[i].num, list[i].title, list[i].author, list[i].pub, list[i].price);
+    if (list[i].borrowed == 0) {
+        printf("대출 가능 입니다.\n");
+    }
+    else {
+        printf("대출 중입니다.\n");
+    }
+}
+void searchBook()
+{
+    char search[100];
+
+    while (1) {
+        found = 0;
+        printf("검색하려는 책의 제목을 입력하세요.\n (검색 작업을 완료했다면 'exit' 입력하여 빠져 나가세요.)\n ");
+        scanf("%s", search);
+
+        if (strcmp(search, "exit") == 0) {
+            break;  // 'exit' 입력 시 루프 종료
+        }
+
+        for (i = 0; i < count; i++)
+        {
+            if (strcmp(search, list[i].title) == 0)
+            {
+                printf("검색 결과: ");
+                printBook();
+                found = 1;
+            }
+        }
+
+        if (found == 0)
+        {
+            printf("검색 결과가 없습니다.\n");
+        }
+    }
+}
+
+void borrowBook()
+{
+    int book_num;
+    found = 0;
+
+    printf("대출 가능한 도서 목록입니다.\n");
+
+    for (i = 0; i < count; i++) {
+        if (list[i].borrowed == 0)
+        {
+            printBook();
+            found = 1; //대출 가능한 도서가 하나 이상 있을 경우(1)
+        }
+    }
+        if (!found) {
+            printf("대출 가능한 도서가 없습니다.\n");
+            return;
+        }
+    
+    printf("\n");
+
+    printf("대출하려는 도서의 번호를 입력하세요\n");
+    printf("도서 번호: \n");
+    scanf("%d", &book_num);
+
+    for (i = 0; i < count; i++)
+    {
+        if (book_num == list[i].num && list[i].borrowed == 0)
+        {
+            printf("대출하려는 도서의 정보를 확인하세요.\n");
+            printf("검색 결과: ");
+            printBook();
+
+            printf("정상적으로 대출되었습니다.\n");
+            list[i].borrowed = 1;
+
+            return; // 함수 종료
+        }      
+    }
+    printf("검색 결과가 없거나 해당 도서는 이미 대출 중입니다.\n");
+}
+
+
+
+
+void returnBook()
+{
+    int book_num;
+    printf("반납 가능한 도서 목록입니다.\n");
+    for (i = 0; i < count; i++) {
+        if (list[i].borrowed == 1)
+        {
+            printBook();
+        }
+    }
+    printf("\n");
+    printf("반납하려는 도서의 번호를 입력하세요\n");
+    printf("도서 번호: \n");
+    scanf("%d", &book_num);
+
+    printf("반납하려는 도서의 정보를 확인하세요.\n");
+
+    for (i = 0; i < count; i++)
+    {
+        if (book_num == list[i].num)
+        {
+            printf("검색 결과: ");
+            printBook();
+
+            if (list[i].borrowed == 1)
+            {
+                printf("정상적으로 반납되었습니다.\n");
+                list[i].borrowed = 0;
+            }
+            else
+            {
+                printf("그건 빌려준 적이 없는데용?\n");
+            }
+
+            return; // 함수 종료
+        }
+    }
+
+    printf("검색 결과가 없습니다.\n");
+}
+
+void deleteBook() {   
+    found = -1;  // 찾은 책의 인덱스를 저장할 변수, -1은 찾지 못한 상태를 의미
+
+    if (count == 0) {
+
+    }
+
+    printf("삭제하려는 책의 번호를 입력하세요\n");
+    scanf("%d", &deletenum);
+
+    // 등록된 책 목록에서 책 번호가 일치하는 책을 찾음
+    for (i = 0; i < count; i++) {
+        if (list[i].num == deletenum) {
+            found = i;  // 찾았으면 인덱스 저장하고 반복문 종료
+            break;
+        }
+        else {
+            printf("해당하는 책을 찾을 수 없습니다.\n");
+            //break;
+        }
+    }
+    // 책을 찾았을 경우 삭제 진행
+    if (found != -1) {
+        // 찾은 책 뒤에 있는 책들을 앞으로 한 칸씩 당김
+        for (i = found; i < count - 1; i++) {
+            list[i] = list[i + 1];
+        }
+
+        count--;  // 등록된 책의 수를 감소
+        printf("책이 삭제되었습니다.\n");
+
+    }
+
+
+}
