@@ -48,6 +48,13 @@
 #define SHT2x_WRITE_USER_REG        0xE6
 #define SHT2x_READ_USER_REG         0xE7
 #define SHT2x_SOFT_RESET            0xFE
+
+#define STK_CTRL  *(volatile unsigned int*)0xE000E010
+#define STK_LOAD  *(volatile unsigned int*)0xE000E014
+#define STK_VAL   *(volatile unsigned int*)0xE000E018
+#define STK_CALIB *(volatile unsigned int*)0xE000E01c
+   
+#define ENABLE 0
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -68,7 +75,6 @@ uint16_t adcData[2];
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void processInput1();
 int fputc(int ch, FILE* stream)
 {
    HAL_UART_Transmit(&huart2, (uint8_t*)&ch, 1, 0xffff);
@@ -78,6 +84,10 @@ int fputc(int ch, FILE* stream)
 
 float SHT20(int);
 void SHT20_Init();
+
+void usDelay(uint16_t us);
+void SysTic_Init();
+void HAL_Delay_Porting();
 
 /* USER CODE END PFP */
 
@@ -118,6 +128,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM1_Init();
   MX_TIM3_Init();
+	MX_TIM10_Init();
   MX_ADC1_Init();
 	MX_I2C1_Init();
 	SHT20_Init();
@@ -128,14 +139,18 @@ int main(void)
   void processInput3();
   void processInput4();
   void processInput5();
+	void processInput6();
   void piano();
 	
 
    
   /* USER CODE BEGIN 2 */
-   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-   HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adcData, 1);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adcData, 1);
+	 
+  HAL_TIM_Base_Start(&htim1);
+  HAL_TIM_Base_Start(&htim10);
   /* USER CODE END 2 */
     
   /* Infinite loop */
@@ -156,33 +171,41 @@ int main(void)
       
       if(rxData == '2'){
          printf("2. Mood Light\n\r");
-         printf("If you want to finish press 'n'\n\r");
+         printf("If you want to finish, press 'n'\n\r");
          processInput2();
       }
          
       if(rxData == '3'){
         printf("3. Piano\n\r");
         printf("Let's play piano~!");   
-				printf("If you want to finish press 'n'\n\r");
+				printf("If you want to finish, press 'n'\n\r");
 				processInput3();
       }
          
       if(rxData == '4'){
         printf("4. Street Light\n\r");
-			  printf("If you want to finish press 'n'\n\r");
+			  printf("If you want to finish, press 'n'\n\r");
 				processInput4();
       }
          
       if(rxData == '5'){
 				printf("5. Temp/Humi\n\r");
-			 	printf("If you want to finish press 'n'\n\r");
+			 	printf("If you want to finish, press 'n'\n\r");
 				processInput5();
+      }
+			
+		  if(rxData == '6'){
+				printf("6. ultrasonic sensor\n\r");
+			 	printf("If you want to finish, press 'n'\n\r");
+				processInput6();
       }
 			
 			if(rxData == '0'){
 				printf("Power OFF\n\r");
 				return 0;
       }
+			
+	
          
             
     /* USER CODE END WHILE */
@@ -254,6 +277,7 @@ void menu()
    printf("3. Piano\n\r");
    printf("4. Street Light\n\r");
    printf("5. Temp/Humi\n\r");
+	 printf("6. ultrasonic sensor\n\r");
 }
 
 void processInput1()   //led shift(PC0~PC7)
@@ -289,9 +313,7 @@ void processInput1()   //led shift(PC0~PC7)
       //printf("%d",i);
       HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin << i, 1);
       HAL_Delay(300);
-      HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin << i, 0);         
-         
-
+      HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin << i, 0);                 
    }
 }
 
@@ -498,9 +520,88 @@ float SHT20(int select)
 	}
 	return convData;
 }
+void processInput6()		//TIM10
+{
+  uint16_t cnt = 0;
+  uint32_t echoTime = 0;
+  uint32_t pwmF;
 
+  TIM1->EGR = TIM1->EGR | 0x01;
+   
+  while(1){
+   
+     SysTic_Init();
+     //구현파 발생 조건
+     HAL_GPIO_WritePin(Trig_GPIO_Port, Trig_Pin, 1);
+     usDelay(15);
+     HAL_GPIO_WritePin(Trig_GPIO_Port, Trig_Pin, 0);
+      
+     while(HAL_GPIO_ReadPin(Echo_GPIO_Port, Echo_Pin) == 0);         
+     STK_CTRL |= (1 << ENABLE);               //SysTick timer start
+     while(HAL_GPIO_ReadPin(Echo_GPIO_Port, Echo_Pin) == 1);
+     echoTime = HAL_GetTick();
+     STK_CTRL &= ~(1 << ENABLE);
+     //340m/s -> 340 * 100cm/1000000us -> 0.034cm/u s
+      
+     printf("Distance = %.1lf cm\n\r", echoTime / 2 * 0.034);
+		 printf("If you want to finish, press 'n'\n\r");	
+  
+       
+     HAL_Delay_Porting();
+     HAL_Delay(200);
+      
+     if ( 0.0 < (echoTime / 2 * 0.034) && (echoTime / 2 * 0.034) < 5.0) {
+       pwmF = 10000000 / 523;
+       TIM1 -> ARR = pwmF -1;
+       TIM1 -> CCR2 = pwmF / 2;
+       HAL_Delay(100);
+       TIM1->ARR = 0; 
+       TIM1->CCR2 = 0;
+     }
+		 else if ( 5.0 < (echoTime / 2 * 0.034) && (echoTime / 2 * 0.034) < 10.0) {
+       pwmF = 10000000 / 523;
+       TIM1 -> ARR = pwmF -1;
+       TIM1 -> CCR2 = pwmF / 2;
+       HAL_Delay(300);
+       TIM1->ARR = 0; 
+       TIM1->CCR2 = 0;
+		 }	 
+		 else if ( 10.0 < (echoTime / 2 * 0.034) && (echoTime / 2 * 0.034) < 15.0) {
+       pwmF = 10000000 / 523;
+       TIM1 -> ARR = pwmF -1;
+       TIM1 -> CCR2 = pwmF / 2;
+       HAL_Delay(400);
+       TIM1->ARR = 0; 
+       TIM1->CCR2 = 0;
+		 }
+		 
+		 if(rxData == 'n'){
+				menu();
+				break;
+    } 
+       
+   }
+}
 
+void usDelay(uint16_t us){
+  __HAL_TIM_SET_COUNTER(&htim10, 0);   
+  while(__HAL_TIM_GET_COUNTER(&htim10) < us){    
+  }
+}
 
+void SysTic_Init()
+{
+   STK_LOAD = 100 - 1;
+   STK_VAL = 0;
+   STK_CTRL = 6; 
+   uwTick = 0;
+}
+
+void HAL_Delay_Porting()
+{
+   STK_LOAD = 100000 - 1;
+   STK_CTRL |= 7;
+}
 
 /* USER CODE END 4 */
 
