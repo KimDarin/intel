@@ -31,9 +31,6 @@ public:
 		//return *(arr + idx);		//포인터 타입
 		return arr[idx];				//배열 타입(read only)
 	}
-	void show();
-	ArrTest& append(int size);						//arr 재생성
-	ArrTest& append(ArrTest brr);
 
 	void show()
 	{
@@ -47,7 +44,7 @@ public:
 		printf("}\n");
 	}
 
-	ArrTest& append(int size)				//size : total?
+	ArrTest& append(int size)						//size : total?
 	{
 		T* arr1 = new T[Len + size];				//확장된 메모리
 		memcpy(arr1, arr, Len * sizeof(T));
