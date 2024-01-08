@@ -1,5 +1,4 @@
-﻿
-// mfcMemo1Dlg.cpp: 구현 파일
+﻿// mfcMemo1Dlg.cpp: 구현 파일
 //
 
 #include "pch.h"
@@ -7,6 +6,8 @@
 #include "mfcMemo1.h"
 #include "mfcMemo1Dlg.h"
 #include "afxdialogex.h"
+#include "CmfcFindDlg.h"
+#include "CmfcReplace.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -52,18 +53,18 @@ END_MESSAGE_MAP()
 
 
 // CmfcMemo1Dlg 대화 상자
-
-
-
 CmfcMemo1Dlg::CmfcMemo1Dlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MFCMEMO1_DIALOG, pParent)
+	: CDialogEx(IDD_MFCMEMO1_DIALOG, pParent),
+	lastSearch(-1)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	
 }
 
 void CmfcMemo1Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT_MEMO, mEditMemo);
 }
 
 BEGIN_MESSAGE_MAP(CmfcMemo1Dlg, CDialogEx)
@@ -72,6 +73,10 @@ BEGIN_MESSAGE_MAP(CmfcMemo1Dlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_COMMAND(ID_MENU_OPEN, &CmfcMemo1Dlg::OnMenuOpen)
 	ON_COMMAND(ID_MENU_ABOUT, &CmfcMemo1Dlg::OnMenuAbout)
+	ON_COMMAND(ID_MENU_FIND, &CmfcMemo1Dlg::OnMenuFind)
+	ON_COMMAND(ID_MENU_FIND_NEXT, &CmfcMemo1Dlg::OnMenuFindNext)
+	ON_COMMAND(ID_MENU_REPLACE, &CmfcMemo1Dlg::OnMenuReplace)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -107,6 +112,16 @@ BOOL CmfcMemo1Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	mAccel = LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCEL1));
+	mStatusBar.Create(WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, 0); //CRect(좌상우하)
+	RepositionBars(AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 2);
+	GetDynamicLayout()->AddItem(mStatusBar.GetSafeHwnd(), 
+		CMFCDynamicLayout::MoveVertical(100), 
+		CMFCDynamicLayout::SizeHorizontal(100));
+	int sec[] = { 100, 200 };	
+	mStatusBar.SetParts(2, sec);
+	mStatusBar.SetText(" Test1", 0, SBT_NOBORDERS);
+	mStatusBar.SetText(" Test2", 1, SBT_NOBORDERS);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -197,10 +212,17 @@ void CmfcMemo1Dlg::OnMenuOpen()		//file open menu 처리기
 
 	for (; ff.getline(buf1, 512);)	//getline은 줄바꿈 문자들을 다 날려버림
 	{
-		((CEdit*)GetDlgItem(IDC_EDIT1))->GetWindowText(str);
-		str += buf1; str += "\r\n";		//줄바꿈을 위해
-		GetDlgItem(IDC_EDIT1)->SetWindowText(str);
+		str = buf1;
+		AddText(str); AddText("\r\n");
 	}
+}
+
+void CmfcMemo1Dlg::AddText(CString s)	//입력기 함수(기존에 있는 문자열에 add만 해줌)
+{
+	CString str;
+	((CEdit*)GetDlgItem(IDC_EDIT_MEMO))->GetWindowText(str);
+	str += s;
+	GetDlgItem(IDC_EDIT_MEMO)->SetWindowText(str);
 }
 
 void CmfcMemo1Dlg::OnMenuAbout()
@@ -210,4 +232,68 @@ void CmfcMemo1Dlg::OnMenuAbout()
 }
 
 
+void CmfcMemo1Dlg::OnMenuFind()		//찾기 함수
+{
+	//CmfcFindDlg dlg;
+	if (m_findDlg.DoModal() == IDOK)	//find할 문자열 입력
+	{
+		CString s;
+		mEditMemo.GetWindowText(s);
+		int start = s.Find(m_findDlg.mStr);		//찾고자 하는 문자열의 위치를 가져올 수 있음
+		int end = start + m_findDlg.mStr.GetLength();
+		mEditMemo.SetSel(start, end); 	
+		
+		lastSearch = end;
+		//select 해주는 함수(드래그) 
+		//인자에는 start 포지션과 end 포지션(start+해당문자열의 길이)을 적어야함
+		// 
+		//AddText(dlg.mStr);	//mStr = 입력한 값
+	}
+}
 
+void CmfcMemo1Dlg::OnMenuFindNext()	//다음 찾기
+{
+	//CmfcFindDlg dlg;
+
+	CString s;
+	mEditMemo.GetWindowText(s);
+
+	// 현재 선택된 부분의 끝 다음 위치부터 찾기 시작
+	lastSearch = s.Find(m_findDlg.mStr, lastSearch + 1);
+
+	if (lastSearch != -1)
+	{
+		int end = lastSearch + m_findDlg.mStr.GetLength();
+		mEditMemo.SetSel(lastSearch, end);
+	}
+}
+
+void CmfcMemo1Dlg::OnMenuReplace()
+{
+	CmfcReplace dlg;
+	if (dlg.DoModal() == IDOK)	//find & replace 할 문자열 입력
+	{
+		CString s;
+		mEditMemo.GetWindowText(s);
+		sFind = dlg.mStrFind;
+		sReplace = dlg.mStrReplace;
+		s.Replace(sFind, sReplace);
+		mEditMemo.SetWindowText(s);
+	}
+}
+
+BOOL CmfcMemo1Dlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (mAccel)
+	{
+		if (TranslateAccelerator(m_hWnd, mAccel, pMsg))	return TRUE;
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+void CmfcMemo1Dlg::OnSize(UINT nType, int cx, int cy)
+{
+	CDialogEx::OnSize(nType, cx, cy);
+
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}

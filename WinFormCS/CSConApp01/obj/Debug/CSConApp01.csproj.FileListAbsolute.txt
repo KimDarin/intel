@@ -1,0 +1,7 @@
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSConApp01\bin\Debug\CSConApp01.exe.config
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSConApp01\bin\Debug\CSConApp01.exe
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSConApp01\bin\Debug\CSConApp01.pdb
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSConApp01\obj\Debug\CSConApp01.csproj.AssemblyReference.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSConApp01\obj\Debug\CSConApp01.csproj.CoreCompileInputs.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSConApp01\obj\Debug\CSConApp01.exe
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSConApp01\obj\Debug\CSConApp01.pdb

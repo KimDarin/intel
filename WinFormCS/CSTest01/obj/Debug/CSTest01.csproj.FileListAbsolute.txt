@@ -1,0 +1,10 @@
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\bin\Debug\CSTest01.exe.config
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\bin\Debug\CSTest01.exe
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\bin\Debug\CSTest01.pdb
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\obj\Debug\CSTest01.csproj.AssemblyReference.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\obj\Debug\CSTest01.Form1.resources
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\obj\Debug\CSTest01.Properties.Resources.resources
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\obj\Debug\CSTest01.csproj.GenerateResource.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\obj\Debug\CSTest01.csproj.CoreCompileInputs.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\obj\Debug\CSTest01.exe
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\CSTest01\obj\Debug\CSTest01.pdb
