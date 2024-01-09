@@ -1,0 +1,11 @@
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\bin\Debug\WinFormTest01_Base.exe.config
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\bin\Debug\WinFormTest01_Base.exe
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\bin\Debug\WinFormTest01_Base.pdb
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\obj\Debug\WinFormTest01_Base.csproj.AssemblyReference.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\obj\Debug\WinFormTest01_Base.Properties.Resources.resources
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\obj\Debug\WinFormTest01_Base.csproj.GenerateResource.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\obj\Debug\WinFormTest01_Base.csproj.CoreCompileInputs.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\obj\Debug\WinFormTest01_Base.exe
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\obj\Debug\WinFormTest01_Base.pdb
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\obj\Debug\WinFormTest01_Base.frmBase.resources
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormTest01_Base\obj\Debug\WinFormTest01_Base.FrmAbout.resources
