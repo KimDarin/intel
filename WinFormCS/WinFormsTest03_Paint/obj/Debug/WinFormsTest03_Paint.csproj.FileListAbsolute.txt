@@ -1,0 +1,10 @@
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\obj\Debug\WinFormsTest03_Paint.csproj.AssemblyReference.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\obj\Debug\WinFormsTest03_Paint.frmPaint.resources
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\obj\Debug\WinFormsTest03_Paint.csproj.GenerateResource.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\obj\Debug\WinFormsTest03_Paint.Properties.Resources.resources
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\obj\Debug\WinFormsTest03_Paint.csproj.CoreCompileInputs.cache
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\bin\Debug\WinFormsTest03_Paint.exe.config
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\bin\Debug\WinFormsTest03_Paint.exe
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\bin\Debug\WinFormsTest03_Paint.pdb
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\obj\Debug\WinFormsTest03_Paint.exe
+C:\Users\EMBEDDED\source\repos\intel\WinFormCS\WinFormsTest03_Paint\obj\Debug\WinFormsTest03_Paint.pdb
