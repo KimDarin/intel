@@ -19,7 +19,7 @@ void Point::ShowEx(const char* s)
 	printf("%s(%d,%d)", s, x, y);							
 }
 
-Point& Point::operator+(Point p)  // µÎÁ¡ CurP¿Í pÀÇ + ¿¬»ê°á°ú¸¦ (»õ·Î¿î Point·Î) ¹ÝÈ¯
+Point& Point::operator+(Point p)  // ï¿½ï¿½ï¿½ï¿½ CurPï¿½ï¿½ pï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½Î¿ï¿½ Pointï¿½ï¿½) ï¿½ï¿½È¯
 {
 	Point* p1 = new Point(x + p.x, y + p.y);
 
@@ -56,10 +56,11 @@ Rect& Rect::operator +(Rect r)
 Rect& Rect::operator -(Rect r)
 {
 	int x1, x2, x3, x4;
-	int y1, y2, y3, y4;
-	Rect& rr = *this;		//³ª ÀÚ½ÅÀ» ¿¢¼¼½º ÇÒ ¶§ rrÀÌ¶ó°í ¾²°Ú´Ù.
+	int y1, y2, y3, y4, y5;
+	Rect& rr = *this;		//ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ rrï¿½Ì¶ï¿½ï¿½ ï¿½ï¿½ï¿½Ú´ï¿½.
+	y5 = 0;
 	
-	///µÎ »ç°¢ÇüÀÌ °ãÄ¡Áö ¾Ê´Â °æ¿ì  0  rect¸¦ ¹ÝÈ¯
+	///ï¿½ï¿½ ï¿½ç°¢ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½  0  rectï¿½ï¿½ ï¿½ï¿½È¯
 	if (rr.LR.x < rr.LL.x || rr.LL.x > r.LR.x) { return *(new Rect(0, 0, 0, 0)); }
 	if (rr.UL.y < rr.LL.y || rr.LL.y > r.UL.y) { return *(new Rect(0, 0, 0, 0)); }
 
@@ -67,6 +68,8 @@ Rect& Rect::operator -(Rect r)
 	x2 = MAX(rr.LL.x, r.LL.x);  
 	x3 = MIN(rr.UR.x, r.UR.x);
 	x4 = MAX(MAX(rr.x1, rr.x2), MAX(r.x1, r.x2));
+
+
 
 	//if (r.LL.x == x1) { x2 = MAX(rr.LL.x, r.LL.x);  x3 = MIN(rr.LR.x, r.LR.x); }
 
